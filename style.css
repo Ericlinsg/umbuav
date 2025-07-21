@@ -1,0 +1,1042 @@
+/* Importação de fontes, se necessário. Exemplo com Google Fonts: */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+/* Importando a fonte Dancing Script para o slogan */
+
+:root {
+    /* Cores */
+    --text-color-light: #f0f0f0;
+    --text-color-dark: #333;
+    --card-bg-color: rgba(255, 255, 255, 0.85);
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --button-bg-color: rgba(0, 0, 0, 0.6);
+    --button-hover-bg-color: rgba(0, 0, 0, 0.8);
+    --card-text-bg-color: rgba(0, 0, 0, 0.6); /* Cor de fundo para o texto do card */
+
+    /* Medidas para Cards e Carrossel - PADRÃO (para telas maiores, ex: desktop) */
+    --card-base-width: 150px;
+    --card-base-height: 240px;
+    --card-spacing: 40px;
+
+    /* Variáveis para o hover */
+    --card-scale-hover: 1.1; /* Escala do card original (reduzida para dar mais destaque ao overlay) */
+    --overlay-scale-hover: 1.35; /* Escala do overlay ::before (maior que a do card) */
+    --card-translateY-hover: -10px; /* Elevação do card */
+    --card-shadow-hover: rgba(0, 0, 0, 0.6);
+}
+
+/* Reset Básico e Estilos Globais */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Fundo da imagem no HTML para ser o padrão (para telas maiores, ex: desktop) */
+html {
+    background: url('imagens/arvoreh2.jpeg') no-repeat center center; /* Fundo padrão para desktop */
+    background-size: cover;
+    background-attachment: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: var(--text-color-light);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.main-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 0;
+    box-sizing: border-box;
+    overflow: visible;
+    flex-grow: 1;
+}
+
+/* Cabeçalho */
+.header {
+    text-align: center;
+    margin-bottom: 50px;
+    margin-top: 0px;
+    z-index: 10;
+    width: 100%;
+    display: flex; /* Adicionado para alinhar logo e links */
+    flex-direction: column; /* Coloca o logo e links em coluna no layout padrão */
+    align-items: center; /* Centraliza horizontalmente o conteúdo */
+    position: relative; /* Para posicionar os links de idioma */
+
+}
+
+.header .logo {
+    width: 180px;
+    height: auto;
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+.header .slogan {
+    font-family: 'Dancing Script', cursive; /* Fonte cursiva */
+    font-size: 4.0em;
+    font-weight: bold;
+    color: #000; /* Cor preta */
+    text-shadow: none; /* Sem sombra */
+    margin: 0;
+}
+
+/* Links de Idioma */
+.language-links {
+    position: absolute;
+    top: 20px; /* Ajuste a posição vertical conforme necessário */
+    right: 20px; /* Alinha à direita */
+    display: flex;
+    gap: 10px; /* Espaçamento entre os links */
+    z-index: 11; /* Para garantir que fiquem acima de outros elementos */
+}
+
+.language-links a {
+    text-decoration: none;
+    color: var(--text-color-dark); /* Cor escura para contrastar com o fundo claro */
+    font-weight: bold;
+    font-size: 1em;
+    padding: 5px 8px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.7); /* Fundo semi-transparente */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.language-links a:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000;
+    transform: scale(1.1); /* Aumenta o botão em 10% no hover */
+    box-shadow: 0 4px 10px}
+
+/* Área de Conteúdo Principal (para centralizar o carrossel) */
+.content-area {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0px 0;
+    box-sizing: border-box;
+    z-index: 5;
+}
+
+/* CARROSSEL DE CATEGORIAS */
+.carousel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    padding: 0 50px; /* Padding para desktop/tablet */
+    box-sizing: border-box;
+}
+
+.carousel-button {
+    display: none;
+}
+
+.carousel-track-container {
+    /* No desktop, o width é calculado para exibir 3 cards */
+    width: calc(
+        (var(--card-base-width) * 3) +
+        (var(--card-spacing) * 2)
+    );
+    overflow: visible;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    max-width: 95%;
+}
+
+.carousel-track {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--card-spacing);
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+    padding: 0px 0; /* Padding interno do track (ajustado na media query) */
+}
+
+.carousel-card {
+    background-color: var(--card-bg-color);
+    border-radius: 15px;
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color-dark);
+    box-shadow: 0 10px 10px var(--shadow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, z-index 0.3s ease;
+    min-width: var(--card-base-width);
+    height: var(--card-base-height);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden; /* Mantido como hidden */
+    position: relative;
+    opacity: 1;
+    flex-shrink: 0;
+    cursor: pointer;
+    z-index: 5; /* Z-index normal do card */
+}
+
+.carousel-card:hover {
+     transform: translateY(var(--card-translateY-hover)) scale(var(--card-scale-hover));
+    box-shadow: 0 10px 20px 10px var(--card-shadow-hover);
+    z-index: 10; /* Garante que o card fique na frente no hover */
+}
+
+/* Imagem e Overlay de Texto */
+.carousel-card img {
+    width: 100%;
+    height: 100%;/* Importação de fontes, se necessário. Exemplo com Google Fonts: */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+/* Importando a fonte Dancing Script para o slogan */
+
+:root {
+    /* Cores */
+    --text-color-light: #f0f0f0;
+    --text-color-dark: #333;
+    --card-bg-color: rgba(255, 255, 255, 0.85);
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --button-bg-color: rgba(0, 0, 0, 0.6);
+    --button-hover-bg-color: rgba(0, 0, 0, 0.8);
+    --card-text-bg-color: rgba(0, 0, 0, 0.6); /* Cor de fundo para o texto do card */
+
+    /* Medidas para Cards e Carrossel - PADRÃO (para telas maiores, ex: desktop) */
+    --card-base-width: 150px;
+    --card-base-height: 240px;
+    --card-spacing: 40px;
+
+    /* Variáveis para o hover do Carrossel */
+    --card-scale-hover: 1.1; /* Escala do card original (reduzida para dar mais destaque ao overlay) */
+    --overlay-scale-hover: 1.35; /* Escala do overlay ::before (maior que a do card) */
+    --card-translateY-hover: -10px; /* Elevação do card */
+    --card-shadow-hover: rgba(0, 0, 0, 0.6);
+    --card-shadow-spread-hover: 5px; /* Spread para a sombra principal no hover */
+
+    /* Variáveis para o novo efeito de "outline" com box-shadow */
+    --outline-blur-radius: 15px; /* Quão embaçado o "outline" será */
+    --outline-spread-radius: 5px; /* Quão "grosso" o "outline" será */
+    --outline-color-start: rgba(0, 0, 0, 0); /* Cor inicial transparente */
+    --outline-color-end: rgba(0, 0, 0, 0.7); /* Cor final com opacidade */
+
+    /* Variáveis para o novo efeito de hover no contêiner do carrossel */
+    --container-hover-scale: 0.95; /* Escala para cards quando o container está hover */
+    --container-hover-translateX: 0px; /* Deslocamento X para cards quando o container está hover */
+
+    /* Variável para o deslocamento vertical do carrossel (se necessário ajustar) */
+    --carousel-offset-y: 0px; /* Ajuste se quiser mover o carrossel para cima/baixo na página */
+}
+
+/* Reset Básico e Estilos Globais */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Fundo da imagem no HTML para ser o padrão (para telas maiores, ex: desktop) */
+html {
+    background: url('imagens/arvoreh2.jpeg') no-repeat center center; /* Fundo padrão para desktop */
+    background-size: cover;
+    background-attachment: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: var(--text-color-light);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.main-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 0;
+    box-sizing: border-box;
+    overflow: visible;
+    flex-grow: 1;
+}
+
+/* Cabeçalho */
+.header {
+    text-align: center;
+    margin-bottom: 50px;
+    margin-top: 0px;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.header .logo {
+    width: 180px;
+    height: auto;
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+.header .slogan { /* Selector agora é para o <p> com a classe slogan */
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5em; /* Aumentado o tamanho do slogan */
+    font-weight: bold;
+    color: #000;
+    text-shadow: none;
+    margin: 0;
+}
+
+/* Links de Idioma */
+.language-links {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 11;
+}
+
+.language-links a {
+    text-decoration: none;
+    color: var(--text-color-dark); /* Cor escura para contrastar com o fundo claro */
+    font-weight: bold;
+    font-size: 1em;
+    padding: 5px 8px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.7); /* Fundo semi-transparente */
+    /* Adicionamos 'transform' e 'box-shadow' à transição aqui para animar a escala e a sombra */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transform: scale(1); /* Garante que começa na escala normal para a transição */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra sutil para dar profundidade */
+}
+
+.language-links a:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000;
+    transform: scale(1.1); /* Aumenta o botão em 10% no hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra mais pronunciada no hover */
+}
+
+/* Área de Conteúdo Principal (para centralizar o carrossel) */
+.content-area {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0px 0;
+    box-sizing: border-box;
+    z-index: 5;
+    position: relative;
+    min-height: 400px; /* Garante altura mínima para centralização */
+}
+
+/* CONTAINER DO CARROSSEL ÚNICO */
+.carousel-container {
+    position: relative; /* Mudado de absolute para relative, já que é o único carrossel */
+    top: 50%; /* Mantido para centralização inicial se não houver wrapper flexbox */
+    left: 50%;
+    transform: translate(-50%, calc(-50% + var(--carousel-offset-y))); /* Ajusta a posição */
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: calc(
+        (var(--card-base-width) * 3) +
+        (var(--card-spacing) * 2) + /* Espaço para 3 cards + 2 gaps */
+        (60px * 2) /* Espaço para botões de navegação */
+    ); /* Ajusta a largura máxima para comportar 3 cards + gaps + botões */
+    padding: 0 20px; /* Padding para garantir que os botões não fiquem colados nas bordas */
+    box-sizing: border-box;
+}
+
+/* Botões de Navegação do Carrossel */
+.carousel-button {
+    background-color: var(--button-bg-color);
+    color: var(--text-color-light);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 2em;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 7; /* Acima dos cards mas abaixo do hover do card principal */
+    user-select: none;
+}
+
+.carousel-button.prev {
+    left: 0px; /* Ajuste a distância da borda */
+}
+
+.carousel-button.next {
+    right: 0px; /* Ajuste a distância da borda */
+}
+
+.carousel-button:hover {
+    background-color: var(--button-hover-bg-color);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-button:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+
+.carousel-track-container {
+    width: calc(
+        (var(--card-base-width) * 3) +
+        (var(--card-spacing) * 2)
+    ); /* Largura para 3 cards + 2 gaps */
+    overflow: visible; /* Permite que o card hovered saia da área */
+    display: flex;
+    justify-content: center; /* Centraliza os cards quando há menos que o máximo visível */
+    position: relative;
+    max-width: 95%; /* Garante que não ultrapasse a largura do pai */
+}
+
+.carousel-track {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--card-spacing);
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transição para o movimento do track (JS) */
+    will-change: transform;
+    padding: 0px 0;
+}
+
+.carousel-card {
+    background-color: var(--card-bg-color);
+    border-radius: 15px;
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-color-dark);
+    box-shadow: 0 10px 20px var(--shadow-color),
+                0 0 0 0 var(--outline-color-start); /* Segundo box-shadow para o "outline" blur */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, z-index 0.3s ease, filter 0.3s ease, opacity 0.3s ease; /* Adicionadas filter e opacity */
+    min-width: var(--card-base-width);
+    height: var(--card-base-height);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    opacity: 1;
+    flex-shrink: 0;
+    cursor: pointer;
+    z-index: 5; /* Z-index normal do card */
+}
+
+/* ---------------------------------------------------- */
+/* EFEITO QUANDO O MOUSE ESTÁ SOBRE O CONTÊINER DO CARROSSEL */
+/* Afeta TODOS os cards DENTRO desse contêiner, exceto o que está sendo hover individualmente */
+.carousel-container:hover .carousel-card {
+    transform: scale(var(--container-hover-scale)) translateX(var(--container-hover-translateX));
+    /* Opcional: menor opacidade, blur leve */
+    /* opacity: 0.8; */
+    /* filter: blur(1px); */
+}
+/* ---------------------------------------------------- */
+
+/* EFEITO QUANDO O MOUSE ESTÁ SOBRE UM CARD INDIVIDUAL (PRECISA TER MAIOR ESPECIFICIDADE) */
+.carousel-card:hover {
+    transform: translateY(var(--card-translateY-hover)) scale(var(--card-scale-hover));
+    box-shadow: 0 15px 30px var(--card-shadow-spread-hover) var(--card-shadow-hover),
+                0 0 var(--outline-blur-radius) var(--outline-spread-radius) var(--outline-color-end);
+    z-index: 10;
+    /* Garante que qualquer opacidade/filtro do hover do container seja desfeito */
+    opacity: 1;
+    filter: none;
+}
+
+/* Efeito de aproximação nos cards adjacentes e subsequentes (PRECISA TER MAIOR ESPECIFICIDADE) */
+
+/* CARD IMEDIATAMENTE SUBSEQUENTE ao card hover (o próximo da direita) */
+.carousel-card:hover + .carousel-card {
+    transform: translateX(calc(var(--card-spacing) * -0.2));
+    z-index: 9;
+    /* Garante que qualquer opacidade/filtro do hover do container seja desfeito */
+    opacity: 1;
+    filter: none;
+}
+
+/* Outros cards SUBSEQUENTES ao card hover (todos os da direita) */
+.carousel-card:hover ~ .carousel-card {
+    transform: translateX(calc(var(--card-spacing) * -0.05));
+    z-index: 8;
+    /* Garante que qualquer opacidade/filtro do hover do container seja desfeito */
+    opacity: 1;
+    filter: none;
+}
+
+
+/* Overlay de Efeito no Hover */
+.carousel-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.3); /* Branco semi-transparente */
+    backdrop-filter: blur(5px); /* Efeito de desfoque */
+    opacity: 0; /* Começa invisível */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 3;
+    border-radius: 15px;
+    pointer-events: none; /* Importante para não bloquear interações com o card */
+}
+
+.carousel-card:hover::before {
+    opacity: 1;
+    transform: scale(var(--overlay-scale-hover));
+}
+
+/* Imagem e Overlay de Texto */
+.carousel-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    margin-bottom: 0;
+    display: block;
+}
+
+.card-text-overlay {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--card-text-bg-color);
+    color: var(--text-color-light);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: auto;
+    opacity: 1;
+    z-index: 12;
+}
+
+.card-text-overlay p {
+    font-size: 1.15em;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* Rodapé */
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-bottom: 20px;
+    z-index: 10;
+    width: 100%;
+}
+
+.social-media {
+    margin-bottom: 10px;
+}
+
+.social-media img {
+    width: 45px;
+    height: 45px;
+    margin: 0 12px;
+    border-radius: 50%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.social-media img:hover {
+    transform: scale(1.15);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.email {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    color: var(--text-color-light);
+    text-shadow: 1px 1px 3px var(--shadow-color);
+}
+
+.copyright {
+    font-size: 0.9em;
+    color: var(--text-color-light);
+    text-shadow: 1px 1px 3px var(--shadow-color);
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 992px) {
+    /* Sem alterações específicas aqui para o carrossel, mas pode adicionar se precisar */
+}
+
+@media (max-width: 768px) {
+    /* Esta Media Query define estilos para telas de até 768px de largura (tablets e celulares) */
+    .header {
+        margin-bottom: 30px;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .header .logo {
+        width: 150px;
+    }
+
+    .header .slogan {
+        font-size: 1.8em; /* Ajuste para tablets */
+
+    }
+
+    /* Links de Idioma em Tablet */
+    .language-links {
+        top: 10px;
+        right: 10px;
+        gap: 8px;
+    }
+
+    .language-links a {
+        font-size: 0.9em;
+        padding: 4px 6px;
+        transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); /* Sombra mais suave para mobile */
+    }
+    .language-links a:hover {
+        transform: scale(1.08); /* Levemente menor aumento de escala no hover para tablets */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+
+    .content-area {
+        padding: 10px 0;
+    }
+
+    /* Oculta os botões de navegação em telas menores para usar rolagem por toque */
+    .carousel-button {
+        display: none;
+    }
+
+    :root {
+        /* Tamanhos para tablets e celulares maiores */
+        --card-base-width: 120px;
+        --card-base-height: 180px;
+        --card-spacing: 20px;
+        --card-scale-hover: 1.1;
+        --overlay-scale-hover: 1.25;
+        --card-translateY-hover: -5px;
+
+        --outline-blur-radius: 10px;
+        --outline-spread-radius: 3px;
+
+        --container-hover-scale: 0.96;
+        --container-hover-translateX: 0px;
+
+        --carousel-offset-y: 0px; /* Resetar ou ajustar se precisar */
+    }
+
+    .carousel-container {
+        position: relative; /* Mantém relative */
+        top: auto;
+        left: auto;
+        transform: none; /* Remove a transformação de centralização absoluta */
+        padding: 0; /* Remove padding lateral que interfere com a rolagem */
+        max-width: 100%; /* Permite que o container se estenda totalmente */
+    }
+
+    .carousel-track-container {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: scroll; /* Ativa a rolagem horizontal */
+        -webkit-overflow-scrolling: touch; /* Melhora a rolagem em iOS */
+        scroll-snap-type: x mandatory; /* Para um scroll mais suave e que "encaixa" nos cards */
+        justify-content: flex-start; /* Alinha os itens ao início para rolagem */
+        padding-left: 5%; /* Adiciona um espaço no início */
+        padding-right: 5%; /* Adiciona um espaço no final */
+        box-sizing: border-box;
+    }
+
+    .carousel-track {
+        padding: 0;
+        gap: var(--card-spacing);
+        transition: none; /* Desativa a transição do transform do track em mobile se a rolagem for manual */
+        will-change: auto;
+        width: fit-content; /* Permite que o conteúdo determine a largura */
+        flex-wrap: nowrap; /* Impede a quebra de linha dos cards */
+    }
+
+    .carousel-card {
+        scroll-snap-align: center; /* Centraliza o card ao parar a rolagem */
+        min-width: var(--card-base-width);
+        height: var(--card-base-height);
+        width: var(--card-base-width); /* Garante que o card tenha a largura base */
+    }
+
+    /* === MUDANÇA DE FUNDO PARA CELULARES: ARVORE.JPEG === */
+    html {
+        background: url('imagens/arvore.jpeg') no-repeat center center;
+        background-size: cover;
+        background-attachment: scroll;
+    }
+    /* ===================================== */
+}
+
+@media (max-width: 576px) {
+    .main-wrapper {
+        padding: 3px 0;
+    }
+
+    .header {
+        margin-bottom: 2px;
+        margin-top: 0;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .header .logo {
+        width: 60px;
+        margin-bottom: 0px;
+    }
+
+    .header .slogan {
+        font-size: 1.2em; /* Ajuste para celulares menores */
+        margin: 1px 0;
+    }
+
+    /* Links de Idioma em Celular */
+    .language-links {
+        top: 5px;
+        right: 5px;
+        gap: 5px;
+    }
+
+    .language-links a {
+        font-size: 0.7em;
+        padding: 3px 5px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Sombra ainda mais sutil para celulares */
+    }
+    .language-links a:hover {
+        transform: scale(1.05); /* Menor aumento de escala no hover para celulares */
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .content-area {
+        padding: 0px 0;
+    }
+
+    /* Botões de navegação já estão ocultos em 768px, mantêm-se ocultos aqui */
+
+    :root {
+        --card-base-width: 90px;
+        --card-base-height: 130px;
+        --card-spacing: 10px;
+        --card-scale-hover: 1.05;
+        --overlay-scale-hover: 1.2;
+        --card-translateY-hover: -1px;
+
+        --outline-blur-radius: 8px;
+        --outline-spread-radius: 2px;
+
+        --container-hover-scale: 0.97;
+        --container-hover-translateX: 0px;
+    }
+
+    .carousel-track-container {
+        padding-left: 1%;
+        padding-right: 1%;
+    }
+
+    .carousel-card {
+        min-width: auto;
+        max-width: 100px;
+        height: 140px;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .card-text-overlay {
+        padding: 2px;
+        font-size: 0.55em;
+        height: auto;
+    }
+    .card-text-overlay p {
+        line-height: 0.9;
+    }
+
+    .footer {
+        margin-top: 5px;
+        padding-bottom: 2px;
+    }
+
+    .social-media {
+        margin-bottom: 2px;
+    }
+
+    .social-media img {
+        width: 18px;
+        height: 18px;
+        margin: 0 2px;
+    }
+
+    .email, .copyright {
+        font-size: 0.5em;
+    }
+}
+    object-fit: cover;
+    border-radius: 0;
+    margin-bottom: 0;
+    display: block;
+}
+
+.card-text-overlay {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--card-text-bg-color);
+    color: var(--text-color-light);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: auto;
+    opacity: 1;
+    z-index: 12; /* Acima de todos os overlays */
+}
+
+.card-text-overlay p {
+    font-size: 1.15em;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* Rodapé */
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-bottom: 20px;
+    z-index: 10;
+    width: 100%;
+}
+
+.social-media {
+    margin-bottom: 10px;
+}
+
+.social-media img {
+    width: 45px;
+    height: 45px;
+    margin: 0 12px;
+    border-radius: 50%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.social-media img:hover {
+    transform: scale(1.15);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.email {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    color: var(--text-color-light);
+    text-shadow: 1px 1px 3px var(--shadow-color);
+}
+
+.copyright {
+    font-size: 0.9em;
+    color: var(--text-color-light);
+    text-shadow: 1px 1px 3px var(--shadow-color);
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 992px) {
+    /* Sem alterações específicas aqui para o carrossel, mas pode adicionar se precisar */
+}
+
+@media (max-width: 768px) {
+    /* Esta Media Query define estilos para telas de até 768px de largura (tablets e celulares) */
+    .header {
+        margin-bottom: 30px;
+        flex-direction: column; /* Garante que em telas menores o logo e slogan fiquem centralizados */
+        position: relative; /* Mantém a posição relativa para os links de idioma */
+    }
+
+    .header .logo {
+        width: 150px;
+    }
+
+    .header .slogan {
+        font-size: 1.4em;
+    }
+
+    /* Links de Idioma em Tablet */
+    .language-links {
+        top: 10px; /* Ajuste para tablets */
+        right: 10px;
+        gap: 8px;
+    }
+
+    .language-links a {
+        font-size: 0.9em;
+        padding: 4px 6px;
+    }
+
+    .content-area {
+        padding: 10px 0;
+    }
+
+    .carousel-container {
+        padding: 0;
+    }
+
+    .carousel-button {
+        display: none;
+    }
+
+    :root {
+        /* Tamanhos para tablets e celulares maiores */
+        --card-base-width: 120px;
+        --card-base-height: 180px;
+        --card-spacing: 20px;
+        --card-scale-hover: 1.1; /* Escala do card original (reduzida) */
+        --overlay-scale-hover: 1.25; /* Escala do overlay (ajustada para tablets) */
+        --card-translateY-hover: -5px;
+    }
+
+    .carousel-track-container {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        justify-content: flex-start;
+        padding-left: 5%;
+        padding-right: 5%;
+        box-sizing: border-box;
+    }
+
+
+    .carousel-track {
+        padding: 0;
+        gap: var(--card-spacing);
+        transition: none;
+        will-change: auto;
+        width: fit-content;
+        flex-wrap: nowrap;
+    }
+
+    .carousel-card {
+        scroll-snap-align: center;
+        min-width: var(--card-base-width);
+        height: var(--card-base-height);
+        width: var(--card-base-width);
+    }
+
+    /* === MUDANÇA DE FUNDO PARA CELULARES: ARVORE.JPEG === */
+    html { /* Aplicar o background vertical aqui, SEMPRE SOBREPONDO O PADRÃO */
+        background: url('imagens/arvore.jpeg') no-repeat center center;
+        background-size: cover;
+        background-attachment: scroll;
+    }
+    /* ===================================== */
+}
+
+@media (max-width: 576px) {
+    /* Essa media query também herdará o background 'arvore.jpeg' da media query de 768px */
+    .main-wrapper {
+        padding: 3px 0;
+    }
+
+    .header {
+        margin-bottom: 2px;
+        margin-top: 10px;
+        flex-direction: column; /* Garante que em telas menores o logo e slogan fiquem centralizados */
+        position: relative; /* Mantém a posição relativa para os links de idioma */
+    }
+
+    .header .logo {
+        width: 80px;
+        margin-bottom: 0px;
+    }
+
+    .header .slogan {
+        font-size: 1.2em;
+        margin: 1px 0;
+    }
+
+    /* Links de Idioma em Celular */
+    .language-links {
+        top: 5px; /* Ajuste para celulares */
+        right: 5px;
+        gap: 5px;
+    }
+
+    .language-links a {
+        font-size: 0.7em;
+        padding: 3px 5px;
+    }
+
+    .content-area {
+        padding: 0px 0;
+    }
+
+    .carousel-container {
+        padding: 20px;
+    }
+
+    .carousel-button {
+        display: none;
+    }
+
+    .carousel-track-container {
+        width: 100%;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        justify-content: flex-start;
+        padding-left: 1%;
+        padding-right: 1%;
+        box-sizing: border-box;
+    }
+
+    .carousel-track {
+        padding: 0;
+        gap: var(--card-spacing);
+        transition: none
